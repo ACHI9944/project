@@ -1,16 +1,15 @@
 import BottomSheet, {BottomSheetScrollView} from '@gorhom/bottom-sheet';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {styles} from './styles';
-
 import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
-  Text,
   TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import {AddNoteModalProps} from './types';
+import CustomButton from '../customButton';
 
 const DefaultModal = ({
   children,
@@ -21,26 +20,6 @@ const DefaultModal = ({
   disabled,
 }: AddNoteModalProps) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => {
-        setKeyboardVisible(true);
-      },
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {
-        setKeyboardVisible(false);
-      },
-    );
-
-    return () => {
-      keyboardDidHideListener.remove();
-      keyboardDidShowListener.remove();
-    };
-  }, []);
 
   useEffect(() => {
     isVisible && bottomSheetRef.current
@@ -55,11 +34,12 @@ const DefaultModal = ({
 
   return (
     <BottomSheet
+      style={styles.modal}
       enableDynamicSizing={false}
       enablePanDownToClose={true}
       ref={bottomSheetRef}
       index={-1}
-      snapPoints={['95%']}
+      snapPoints={['100%']}
       onChange={handleSheetChange}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -69,19 +49,11 @@ const DefaultModal = ({
             {children}
           </BottomSheetScrollView>
         </TouchableWithoutFeedback>
-        <Pressable
+        <CustomButton
           disabled={disabled}
-          onPress={onSubmit}
-          style={[
-            styles.buttonContainer,
-            isKeyboardVisible &&
-              Platform.OS === 'android' && {marginBottom: 25},
-            disabled && {backgroundColor: '#d3d3d3'},
-          ]}>
-          <Text style={[styles.buttonText, disabled && {color: '#363636'}]}>
-            {buttonText}
-          </Text>
-        </Pressable>
+          onSubmit={onSubmit}
+          buttonText={buttonText}
+        />
       </KeyboardAvoidingView>
     </BottomSheet>
   );

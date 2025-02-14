@@ -28,7 +28,7 @@ export const DummyIncomeList: TransactionItem[] = [
   {
     name: 'ხელფასი',
     category: 'ხელფასი',
-    value: 2000,
+    value: 2000000,
     id: 2,
     date: '10 დეკ, 2024, 12:20PM',
     type: 'შემოსავლები',
@@ -47,7 +47,7 @@ export const DummyExpensesList: TransactionItem[] = [
   {
     name: 'რონის პიცა',
     category: 'კვება',
-    value: -100,
+    value: -1000,
     id: 3,
     date: '8 აგვ, 2024, 12:20PM',
     type: 'გადარიცხვები',
@@ -64,7 +64,7 @@ export const DummyExpensesList: TransactionItem[] = [
   {
     name: 'პირადი გადარიცხვა',
     category: 'პირადი გადარიცხვა',
-    value: -500,
+    value: -10000,
     id: 4,
     date: '9 სექ, 2024, 12:20PM',
     type: 'გადარიცხვები',

@@ -5,8 +5,8 @@ const TabBarIcon = ({focused, uri}: tabBarIcon) => {
   return (
     <Image
       style={{
-        width: 30,
-        height: 30,
+        width: 25,
+        height: 25,
         tintColor: focused ? '#c374a4' : 'black',
       }}
       source={{uri: uri}}

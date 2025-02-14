@@ -1,4 +1,4 @@
-import {RootTabParamList} from '../../navigation/types';
-import {NavigationProp} from '@react-navigation/native';
-
-export type props = NavigationProp<RootTabParamList>;
+export type BannerItem = {
+    id: string;
+    text: string;
+  };

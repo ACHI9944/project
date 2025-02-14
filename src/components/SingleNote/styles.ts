@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
         padding: 16,
         marginBottom: 8,
         borderRadius: 10,
+        height: 70
       },
       noteHeader: {
         fontSize: 18,

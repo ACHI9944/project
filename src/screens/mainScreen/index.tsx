@@ -1,16 +1,39 @@
-import React from 'react';
-import {Pressable, Text, View} from 'react-native';
+import React, {useCallback} from 'react';
+import {FlatList, ListRenderItem, Text, View} from 'react-native';
 import {styles} from './styles';
-import {useNavigation} from '@react-navigation/native';
-import {props} from './types';
+import {BannerItem} from './types';
 
-const MainScreen = () => {
-  const {navigate} = useNavigation<props>();
+const MainScreen: React.FC = () => {
+  const banners: BannerItem[] = [
+    {id: '1', text: '300 X 180\nHALF BANNER'},
+    {id: '2', text: '300 X 180\nHALF BANNER'},
+    {id: '3', text: '300 X 180\nHALF BANNER'},
+    {id: '4', text: '300 X 180\nHALF BANNER'},
+    {id: '5', text: '300 X 180\nHALF BANNER'},
+    {id: '6', text: '300 X 180\nHALF BANNER'},
+    {id: '7', text: '300 X 180\nHALF BANNER'},
+  ];
+  const renderItem = useCallback<ListRenderItem<BannerItem>>(
+    ({item}) => (
+      <View style={[styles.banner, item.id === '7' ? {marginRight: 10} : null]}>
+        <Text style={styles.text}>{item.text}</Text>
+      </View>
+    ),
+    [],
+  );
   return (
     <View style={styles.container}>
-      <Pressable style={styles.button} onPress={() => navigate('Finances')}>
-        <Text style={styles.text}>Click To View Finances</Text>
-      </Pressable>
+      <FlatList
+        pagingEnabled
+        data={banners}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        keyExtractor={item => item.id}
+        renderItem={renderItem}
+        snapToAlignment="center"
+        snapToInterval={310}
+        decelerationRate="fast"
+      />
     </View>
   );
 };

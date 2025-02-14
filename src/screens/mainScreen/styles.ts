@@ -3,28 +3,22 @@ import {StyleSheet} from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 15,
     backgroundColor: '#f6f6f6',
+    paddingVertical: 15,
   },
-  headerContainer: {
-    marginVertical: 15,
+  banner: {
+    width: 300,
+    height: 180,
+    backgroundColor: '#0055A4', 
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  header: {
-    fontSize: 15,
-    fontWeight: 'bold',
-  },
-  button: {
-    backgroundColor: 'blue',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 50,
-    marginTop: 200,
+    borderRadius: 10,
+    marginLeft: 10
   },
   text: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 18,
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
 });

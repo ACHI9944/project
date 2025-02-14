@@ -2,6 +2,7 @@ export type RootTabParamList = {
   Main: undefined;
   Finances: undefined;
   Notes: undefined
+  Users:undefined
 };
 
 export type MainStackParamList = {
@@ -18,6 +19,13 @@ export type FinancesStackParamList = {
 export type NotesStackParamList = {
   MyNotes: undefined;
   SingleNote: {
-    id:string
+    id:string 
+  }
+}
+
+export type UsersStackParamList = {
+  usersScreen:undefined
+  singleUser:{
+    id:number
   }
 }

@@ -1,11 +1,5 @@
-import {
-  FlatList,
-  Keyboard,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-import React, {useCallback, useLayoutEffect, useState} from 'react';
+import {Keyboard, Text, TouchableWithoutFeedback, View} from 'react-native';
+import React, {useCallback, useLayoutEffect, useRef, useState} from 'react';
 import {styles} from './styles';
 import {useNavigation} from '@react-navigation/native';
 import ImageIconComponent from '../../components/imageIconComponent';
@@ -14,9 +8,12 @@ import DefaultModal from '../../components/DefaultModal';
 import LabelAndBottomSheetTextInput from '../../components/LabelAndBottomSheetTextInput';
 import {useForm} from 'react-hook-form';
 import {FormData} from './types';
-import {addNote} from '../../store/data';
+import {addNote, removeNote} from '../../store/data';
 import {useAppSelector, useAppDispatch} from '../../util/CustomReduxHooks';
 import SingleNote from '../../components/SingleNote';
+import EmaptyComponent from '../../components/EmptyComponent';
+import {RowMap, SwipeListView, SwipeRow} from 'react-native-swipe-list-view';
+import {HiddenItemWithActions} from '../../components/HiddenItemWithActions';
 
 const NotesScreen = () => {
   const [isSheetOpen, setIsSheetOpen] = useState<boolean>(false);
@@ -24,18 +21,35 @@ const NotesScreen = () => {
   const {setOptions} = useNavigation();
   const dispatch = useAppDispatch();
   const notes = useAppSelector(state => state.notes);
-  const header = watch('header');
-  const text = watch('text');
+  const openRowRef = useRef<SwipeRow<FormData> | null>(null);
+
+  const swipeBack = () => {
+    if (openRowRef.current) {
+      openRowRef.current.closeRow();
+      openRowRef.current = null;
+    }
+  };
+  const handleRowOpen = (rowKey: string, rowMap: RowMap<FormData>) => {
+    if (openRowRef.current && openRowRef.current !== rowMap[rowKey]) {
+      openRowRef.current.closeRow();
+    }
+    openRowRef.current = rowMap[rowKey];
+  };
+
   useLayoutEffect(() => {
     setOptions({
       headerRight: () => (
-        <ImageIconComponent onPress={openModal} imageuri={Add} />
+        <ImageIconComponent
+          swipeBack={swipeBack}
+          onPress={openModal}
+          imageuri={Add}
+        />
       ),
     });
   }, [setOptions]);
 
   const onSubmit = (data: FormData) => {
-    dispatch(addNote({header, text}));
+    dispatch(addNote(data));
     reset();
     Keyboard.dismiss();
     closeModal();
@@ -47,18 +61,56 @@ const NotesScreen = () => {
   function closeModal() {
     setIsSheetOpen(false);
   }
-
+  const renderEmptyComponent = useCallback(() => {
+    return <EmaptyComponent />;
+  }, []);
   const renderNotes = useCallback(({item}: {item: FormData}) => {
     return <SingleNote item={item} />;
   }, []);
+
+  const renderHiddenItem = useCallback(
+    ({item}: {item: FormData}, rowMap: RowMap<FormData>) => {
+      const closeRow = (rowMap: RowMap<FormData>, rowKey: string) => {
+        if (rowMap[rowKey]) {
+          rowMap[rowKey].closeRow();
+        }
+      };
+      const deleteRow = (rowMap: RowMap<FormData>, rowKey: string) => {
+        closeRow(rowMap, rowKey);
+        dispatch(removeNote(rowKey));
+      };
+      const onCloseRow = () => {
+        closeRow(rowMap, item.id);
+      };
+      const onDeleteRow = () => {
+        deleteRow(rowMap, item.id);
+      };
+      return (
+        <HiddenItemWithActions onClose={onCloseRow} onDelete={onDeleteRow} />
+      );
+    },
+    [],
+  );
+
+  const handlePressOutside = () => {
+    swipeBack();
+    Keyboard.dismiss();
+  };
+
   return (
     <>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <TouchableWithoutFeedback onPress={handlePressOutside} accessible={false}>
         <View style={styles.container}>
-          <FlatList
+          <SwipeListView
             data={notes}
-            keyExtractor={(item, index) => index.toString()}
             renderItem={renderNotes}
+            renderHiddenItem={renderHiddenItem}
+            ListEmptyComponent={renderEmptyComponent}
+            keyExtractor={item => item.id}
+            contentContainerStyle={styles.contentContainerStyle}
+            rightOpenValue={-105}
+            disableRightSwipe={true}
+            onRowOpen={handleRowOpen}
           />
         </View>
       </TouchableWithoutFeedback>

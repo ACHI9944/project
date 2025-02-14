@@ -3,7 +3,6 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import NotesScreen from '../screens/NotesScreen';
 import {NotesStackParamList} from './types';
-import SingleNote from '../components/SingleNote';
 import SingleNoteScreen from '../screens/SingleNoteScreen';
 
 export default function TabNotesSreen() {

@@ -5,11 +5,17 @@ export const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 15,
         backgroundColor: '#f6f6f6',
+        
+      },
+      contentContainerStyle: {
+      flexGrow:1
       },
       
       modalContainer: {
         padding: 15,
-        flex: 1
+        flex: 1,
+
+        
       },
       modalHeaderView: {
         flexDirection: 'row',

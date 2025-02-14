@@ -4,7 +4,7 @@ import { NotesStackParamList } from "../../navigation/types";
 export type noteProp = {
     header: string;
     text: string;
-    id: string
+    id: string;
   };
 
 

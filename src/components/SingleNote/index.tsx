@@ -2,10 +2,9 @@ import {Pressable, Text, View} from 'react-native';
 import React from 'react';
 import {styles} from './styles';
 import {useNavigation} from '@react-navigation/native';
-import {FormData} from '../../screens/NotesScreen/types';
 import {props, singleNoteProp} from './types';
 
-const SingleNote = ({item}: singleNoteProp) => {
+export const SingleNote = ({item}: singleNoteProp) => {
   const {navigate} = useNavigation<props>();
 
   const openSingleNote = () => {

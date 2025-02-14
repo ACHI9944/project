@@ -3,8 +3,9 @@ import TabMainScreen from './TabMainscreen';
 import TabMyFinances from './TabMyFinances';
 import {RootTabParamList} from './types';
 import TabBarIcon from '../components/tabBarIcon';
-import {financesUri, homeUri, notesUri} from '../constants/uri';
+import {financesUri, homeUri, notesUri, users} from '../constants/uri';
 import TabNotesSreen from './TabNotesSreen';
+import TabUsersScreen from './tabUsersScreen';
 
 const Router = () => {
   const {Navigator, Screen} = createBottomTabNavigator<RootTabParamList>();
@@ -37,6 +38,15 @@ const Router = () => {
         }}
         name="Notes"
         component={TabNotesSreen}
+      />
+      <Screen
+        options={{
+          tabBarIcon: ({focused}) => (
+            <TabBarIcon focused={focused} uri={users} />
+          ),
+        }}
+        name="Users"
+        component={TabUsersScreen}
       />
     </Navigator>
   );
