@@ -1,40 +1,52 @@
 import React, {useCallback} from 'react';
-import {FlatList, ListRenderItem, Text, View} from 'react-native';
+import {Dimensions, FlatList, ListRenderItem, Text, View} from 'react-native';
 import {styles} from './styles';
+import {banners} from '../../assets/dummyBanners';
 import {BannerItem} from './types';
 
 const MainScreen: React.FC = () => {
-  const banners: BannerItem[] = [
-    {id: '1', text: '300 X 180\nHALF BANNER'},
-    {id: '2', text: '300 X 180\nHALF BANNER'},
-    {id: '3', text: '300 X 180\nHALF BANNER'},
-    {id: '4', text: '300 X 180\nHALF BANNER'},
-    {id: '5', text: '300 X 180\nHALF BANNER'},
-    {id: '6', text: '300 X 180\nHALF BANNER'},
-    {id: '7', text: '300 X 180\nHALF BANNER'},
-  ];
+  const SCREEN_WIDTH = Dimensions.get('window').width;
+  const ITEM_WIDTH = SCREEN_WIDTH * 0.75;
+  const ITEM_SPACING = 12;
+  const SIDE_MARGIN = 24;
+  const SNAP_INTERVAL = ITEM_WIDTH + ITEM_SPACING;
+
+  const snapToOffsets = banners.map(
+    (_, index) =>
+      SIDE_MARGIN + index * SNAP_INTERVAL - (SCREEN_WIDTH - ITEM_WIDTH) / 2,
+  );
+
   const renderItem = useCallback<ListRenderItem<BannerItem>>(
-    ({item}) => (
-      <View style={[styles.banner, item.id === '7' ? {marginRight: 10} : null]}>
+    ({item, index}) => (
+      <View
+        style={[
+          styles.banner,
+          index === 0
+            ? styles.bannerleft
+            : index === banners.length - 1
+            ? styles.bannerRight
+            : {},
+        ]}>
         <Text style={styles.text}>{item.text}</Text>
       </View>
     ),
-    [],
+    [banners.length],
   );
+
   return (
     <View style={styles.container}>
       <FlatList
-        pagingEnabled
         data={banners}
         horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={item => item.id}
         renderItem={renderItem}
-        snapToAlignment="center"
-        snapToInterval={310}
+        snapToOffsets={snapToOffsets}
         decelerationRate="fast"
+        contentContainerStyle={banners.length === 1 && styles.flatlist}
       />
     </View>
   );
 };
+
 export default MainScreen;
